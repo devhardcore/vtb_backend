@@ -1,2 +1,4 @@
 fastapi==0.68.1
 sqlalchemy==1.4.23
+deta==1.0.0
+pydantic==1.8.2

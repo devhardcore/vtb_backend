@@ -1,0 +1,1 @@
+{"id":"26b25c2d-e0d4-4366-a145-44904d24861b","space":11735,"runtime":"python3.9","name":"vtb_backend","path":"wh4l9w","project":"c0jrkegd","account":"144798365827","region":"ap-southeast-1","deps":["fastapi==0.68.1","sqlalchemy==1.4.23","deta==1.0.0","pydantic==1.8.2"],"envs":null,"public":true,"log_level":"debug","cron":""}
