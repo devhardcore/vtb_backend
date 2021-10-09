@@ -41,6 +41,19 @@ async def create_new_user(username: str, token: str, segment: int):
         "link": False
     })
 
+    db_users_stat.put({
+        "First_lvl": False,
+        "First_par": "",
+        "Second_lvl": False,
+        "Second_par": "",
+        "Third_lvl": False,
+        "Third_par": "",
+        "Token": token,
+        "is_vtb": False,
+        "is_invest": False,
+        "is_social": False
+    })
+
 
 @app.post("/insert_coins")
 async def insert_coins(n: int, token: str):
@@ -131,3 +144,53 @@ async def post_social_info(token: str):
     db_users_stat.update(update_module, key)
 
 
+def get_stat(token: str):
+    score = 0
+    test_fetch = db_users_stat.fetch({"Token": token})
+    if test_fetch.items[0]["First_lvl"]:
+        score += 1
+    if test_fetch.items[0]["Second_lvl"]:
+        score += 1
+    if test_fetch.items[0]["Third_lvl"]:
+        score += 1
+    if test_fetch.items[0]["is_invest"]:
+        score += 1
+    if test_fetch.items[0]["is_social"]:
+        score += 1
+    if test_fetch.items[0]["is_vtb"]:
+        score += 1
+
+    score = score / 6
+
+    return score
+
+
+@app.get("/stat")
+async def get_many_stat():
+    score = 0
+    res = db_users_stat.fetch()
+    all_items = res.items
+
+    # fetch until last is 'None'
+    while res.last:
+        res = db_users_stat.fetch(last=res.last)
+        all_items += res.items
+
+    for row in all_items:
+        if row["First_lvl"]:
+            score += 1
+        if row["Second_lvl"]:
+            score += 1
+        if row["Third_lvl"]:
+            score += 1
+        if row["is_invest"]:
+            score += 1
+        if row["is_social"]:
+            score += 1
+        if row["is_vtb"]:
+            score += 1
+        score /= 6
+        row["score"] = score
+        score = 0
+
+    return all_items
